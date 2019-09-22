@@ -1,5 +1,4 @@
-const {app, connection} = require("/PokeMeet/app/server.js");
-
+const {app, connection} = require("../server.js");
 
 
 app.get("/api/trainers", function(req, res) {

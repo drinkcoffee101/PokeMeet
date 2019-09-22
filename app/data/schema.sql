@@ -12,3 +12,8 @@ CREATE TABLE trainers (
     attr VARCHAR(30)
 );
 
+CREATE TABLE questions (
+    id INT AUTO_INCREMENT, 
+    PRIMARY KEY (id),
+    question VARCHAR(300)
+);
