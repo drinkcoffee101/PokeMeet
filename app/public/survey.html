@@ -9,12 +9,23 @@
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">\
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 <body>
   <h1>Survey</h1>
-  <div class="container"></div>
+  <img src='/PokeMeet/app/public/img/misty.jpg'>
+  <!-- <button type="submit" class="btn btn-primary" id="button">Submit</button> -->
+  <div class="container">
+    <div class="card">
+      <div class="card-body">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="name" class="form-control" id="name">
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -24,7 +35,8 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
-  <script>$(document).ready(function () {
+  <script>
+    $(document).ready(function () {
       var num = 1;
       $.get('api/questions', (data) => {
         data.forEach(e => {
@@ -62,28 +74,60 @@
 
           num++;
         });
+      });
+      var submit = $('<button type="submit" class="btn btn-primary" id="button">');
+      submit.text('Submit');
+      $('body').append(submit);
 
-        var submit = $('<button type="submit" class="btn btn-primary">');
-        submit.text('Submit')
-        $('.container').append(submit);
+      $('#button').click((e) => {
+        e.preventDefault();
 
-        $('button').click(function (e) {
-          e.preventDefault();
-          var answers = [parseInt($('#sel1').val()),
-          parseInt($('#sel2').val()),
-          parseInt($('#sel3').val()),
-          parseInt($('#sel4').val()),
-          parseInt($('#sel5').val()),
-          parseInt($('#sel6').val()),
-          parseInt($('#sel7').val()),
-          parseInt($('#sel8').val()),
-          parseInt($('#sel9').val()),
-          parseInt($('#sel10').val())
-          ]
-          console.log(answers);
-        });
-      })
-    })</script>
+        var responses = $('#sel1').val() + ',' + $('#sel2').val() + ',' + $('#sel3').val() + ',' + $('#sel4').val() + ',' + $('#sel5').val() + ',' + $('#sel6').val() + ',' + $('#sel7').val() + ',' + $('#sel8').val() + ',' + $('#sel9').val() + ',' + $('#sel10').val()
+
+        var name = $('#name').val().trim();
+
+        console.log(responses);
+        var answers = {
+          attr: responses,
+          name: name
+        };
+
+        $.post('/api/trainers', answers)
+          .then((res) => {
+            displayMatch(res);
+            $('#myModal').modal('show');
+          });
+      });
+    });
+
+    let displayMatch = (obj) => {
+      var modalContainer = $('<div class="modal fade" id="myModal" role="dialog">');
+      var modalDialog = $('<div class="modal-dialog">');
+      var modal = $(' <div class="modal-content">');
+      var modalContent = $('<div class="modal-content">');
+      var modalHeader = $('<div class="modal-header">');
+      // var dismiss = $('<button type="button" class="close" data-dismiss="modal">');
+      // dismiss.text('&times;');
+      var modalTitle = $('<h4 class="modal-title">');
+      modalTitle.text(`You matched with ${obj.matchName}!!!`);
+      var modalBody = $('<div class="modal-body">');
+      var modalBodyImg = $('<img>');
+      modalBodyImg.attr('src', `${obj.img}`);
+      var footer = $('<div class="modal-footer">');
+      var footerButton = $('<button type="button" class="btn btn-default" data-dismiss="modal">');
+      footerButton.text('Close');
+
+      $('.container').append(modalContainer);
+      modalContainer.append(modalDialog);
+      modalDialog.append(modal);
+      modal.append(modalHeader);
+      modalHeader.append(modalTitle);
+      modal.append(modalBody);
+      modalBody.append(modalBodyImg);
+      modal.append(footer);
+      footer.append(footerButton);
+    }
+  </script>
 
 </body>
 
