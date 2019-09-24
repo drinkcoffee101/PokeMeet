@@ -14,7 +14,7 @@
 
 <body>
   <h1>Survey</h1>
-  <img src='/PokeMeet/app/public/img/misty.jpg'>
+  <!-- <img src='/PokeMeet/app/public/img/misty.jpg'> -->
   <!-- <button type="submit" class="btn btn-primary" id="button">Submit</button> -->
   <div class="container">
     <div class="card">
@@ -86,14 +86,17 @@
 
         var name = $('#name').val().trim();
 
-        console.log(responses);
+        // console.log(responses);
         var answers = {
           attr: responses,
           name: name
         };
+        // console.log(answers)
 
         $.post('/api/trainers', answers)
-          .then((res) => {
+          .then((err,res) => {
+            if (err) throw err;
+            console.log('post response' + res);
             displayMatch(res);
             $('#myModal').modal('show');
           });

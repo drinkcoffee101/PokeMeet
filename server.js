@@ -8,14 +8,6 @@ var app = express();
 
 var PORT = process.env.PORT || 3000;
 
-require('./app/routing/htmlRoutes')(app);
-
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(express.static(path.join(__dirname + 'app/public')));
-
-
 var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
@@ -23,6 +15,17 @@ var connection = mysql.createConnection({
     password: "Bluestone101!",
     database: "pokeTrainers_db"
 });
+
+// require('./app/routing/htmlRoutes')(connection);
+
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static(path.join(__dirname + 'app/public')));
+
+require('./app/routing/htmlRoutes')(app, connection);
+
+
 
 // Make connection.
 connection.connect(function (err) {
