@@ -2,12 +2,19 @@ var express = require("express");
 // Set up MySQL connection.
 var mysql = require("mysql");
 
+var path = require('path');
+
 var app = express();
 
 var PORT = process.env.PORT || 3000;
 
+require('./app/routing/htmlRoutes')(app);
+
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static(path.join(__dirname + 'app/public')));
+
 
 var connection = mysql.createConnection({
     host: "localhost",

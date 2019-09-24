@@ -2,40 +2,43 @@ var path = require("path");
 
 const { app, connection } = require("../../server.js");
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/home.html"));
-});
 
-app.get("/survey", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/survey.html"));
-});
-
-app.get("/api/trainers", (req, res) => {
-  connection.query("SELECT * FROM trainers ORDER BY id", (err, data) => {
-    if (err) throw err;
-    res.json(data);
-    console.log(data[0].attr);
+module.exports = (app) => {
+  app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/home.html"));
+    console.log(__dirname);
   });
-});
 
-app.get("/api/questions", (req, res) => {
-  connection.query("SELECT * FROM questions ORDER BY id", (err, data) => {
-    if (err) throw err;
-    res.json(data);
-
-
+  app.get("/survey", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/survey.html"));
   });
-});
 
-app.post('/api/trainers', (req, res) => {
-  var newAnswers = req.body;
-  // res.json(newAnswers);
-  findMatch(formatScore(newAnswers.attr), (data) => {
-    res.json(data);
-    console.log(data)
+  app.get("/api/trainers", (req, res) => {
+    connection.query("SELECT * FROM trainers ORDER BY id", (err, data) => {
+      if (err) throw err;
+      res.json(data);
+      console.log(data[0].attr);
+    });
   });
-})
 
+  app.get("/api/questions", (req, res) => {
+    connection.query("SELECT * FROM questions ORDER BY id", (err, data) => {
+      if (err) throw err;
+      res.json(data);
+
+
+    });
+  });
+
+  app.post('/api/trainers', (req, res) => {
+    var newAnswers = req.body;
+    // res.json(newAnswers);
+    findMatch(formatScore(newAnswers.attr), (data) => {
+      res.json(data);
+      console.log(data)
+    });
+  })
+}
 
 let findMatch = (userScore, cb) => {
   connection.query("SELECT * FROM trainers ORDER BY id", (err, data) => {
