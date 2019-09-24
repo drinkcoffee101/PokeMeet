@@ -1,6 +1,6 @@
 var path = require("path");
 
-const { app, connection } = require("../../server.js/index.js");
+const { app, connection } = require("../../server.js");
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/home.html"));
